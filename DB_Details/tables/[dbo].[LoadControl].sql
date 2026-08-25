@@ -19,3 +19,30 @@ CREATE TABLE [dbo].[LoadControl]
     CONSTRAINT [PK_LoadControl]
         PRIMARY KEY CLUSTERED ([LoadControlID])
 );
+
+
+INSERT INTO [dbo].[LoadControl]
+(
+    [SchemaName],
+    [SourceTable],
+    [TargetTable],
+    [Activated],
+    [NewRecords],
+    [LoadType],
+    [LoadStatus],
+    [LastLoadDate],
+    [LastLoadStartTime],
+    [LastLoadEndTime],
+    [LastLoadMessage],
+    [CreatedBy],
+    [ModifiedDate],
+    [ModifiedBy]
+)
+VALUES
+('dbo', 'BPMaster',          'BPMaster',        1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+('dbo', 'ItemMaster',       'ItemMaster',       1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+('dbo', 'Warehouse',        'Warehouse',        1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+('dbo', 'HouseBankAccounts','HouseBankAccounts',1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+('dbo', 'CostCenter',       'CostCenter',       1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+('dbo', 'SalesEmployees',   'SalesEmployees',   1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+('dbo', 'Users',            'Users',            1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);

@@ -1,5 +1,5 @@
-const environment = require("../config/environment");
-const config = require("../SAP_Connection/db_connection");
+const environment = require("../../config/environment");
+const config = require("../../SAP_Connection/db_connection_hana");
 
 const conn = config.con;
 const master_sql = function () { };

@@ -10,9 +10,9 @@ module.exports = {
   requestLogRollingInterval: process.env.MORGAN_LOG_ROLLING_INTERVAL || "1d",
 
 
-  companyDB: "Z10_TEST",
-  username: "PSL2",
-  password: "1234",
+  companyDB: "DEVP_RAWA",
+  username: "SYSTEM",
+  password: "Mjk@1234",
 
   Sql_server: "1234",
   Sql_companyDB: "Z10_TEST",
@@ -20,10 +20,10 @@ module.exports = {
   Sql_password: "1234",
 
   sapServiceLayer: "https://172.16.1.38:50000",
-  IP: "172.16.1.38",
-  Port: "30041",
+  IP: "10.0.0.6",
+  Port: "30015",
   DBUsername: "SYSTEM",
-  DBPassword: "Root1234",
+  DBPassword: "Mjk@1234",
   IntermediateDB: "SAP_API_INTTERGRATION",
 
 };

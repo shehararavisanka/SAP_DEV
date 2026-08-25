@@ -10,21 +10,22 @@ exports.UpdateChecking = async (req, res, next) => {
         //call HANA SP and get updatedDocumentlist
         //Master tablelist
 
-        var lastrundate = '2026-08-20 08:00'
+        var lastrundate = '2024-08-20 08:00'
         var updatedDocumentlist = await masterservice.select_All_MasterTables(lastrundate)
 
-        if (updatedDocumentlist != null) {
+        console.log(updatedDocumentlist)
+        // if (updatedDocumentlist != null) {
 
-            for (let index = 0; index < updatedDocumentlist.length; index++) {
-                const element = updatedDocumentlist[index];
-                //update sql loadcontrol table
+        //     for (let index = 0; index < updatedDocumentlist.length; index++) {
+        //         const element = updatedDocumentlist[index];
+        //         //update sql loadcontrol table
 
-                var result = await masterservice_sql.update_LoadControl(element.LoadControlID)
+        //         var result = await masterservice_sql.update_LoadControl(element.LoadControlID)
 
-            }
+        //     }
 
-        }
-        //Transaction tablelist
+        // }
+        // //Transaction tablelist
 
 
 

@@ -3,11 +3,9 @@ const schedule = require("node-schedule");
 const authRouter = require("./routes/auth.route");
 const requestLogger = require("./util/request.logger");
 const logger = require("./util/default.logger");
-const environment = require("./config/environment");
-const bgprocesss = require("./util/bgprocess");
+const environment = require("./config/environment"); 
 const app = express();
- 
-const Badmaster = require("./routes/BadmasterCreate.route");
+  
 const MainController = require("./controllers/Main.controller");
 
  
@@ -32,8 +30,7 @@ if (environment.requestLogEnable) {
 } else {
   logger.info("Request logger disabled.");
 }
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+ 
  
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -55,7 +52,7 @@ app.listen(PORT, () => {
 
   var j = schedule.scheduleJob(
     // "*/" + environment.CycleTime + " * * * *",
-    "* * * * * *",
+      "*/2 * * * *",
     () => {
       logger.info(`Executing every ${environment.CycleTime} minutes!`);
       logger.info(`/************************/`);
