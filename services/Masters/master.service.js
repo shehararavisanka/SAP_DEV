@@ -18,10 +18,13 @@ const MasterService = {
     ,
     select_MasterTables_byname: async (tablename, lastupdate) => {
         try {
-            const  Query = `CALL ${environment.companyDB}."Sap_select_All_MasterTables"('${lastdatetime}')`;
+            const  Query = `CALL ${environment.companyDB}."Sap_select_${tablename}_All" ('${lastupdate}')`;
+
+            console.log(Query)
+
             const QueryDataset = await conn.exec(Query);
 
-            return QueryDataset[0];
+            return QueryDataset;
         } catch (error) {
             throw new Error(`Get account code service: ${error.message}`);
         }

@@ -1,29 +1,51 @@
-const mysql = require("mysql");
-const sql = require("mssql");
+ const sql = require("mssql/msnodesqlv8");
 const environment = require("../config/environment");
-const logger = require("./../util/default.logger");
+const logger = require("../util/default.logger");
 
-
-const con = new sql.ConnectionPool({
+const config = {
   server: environment.Sql_server,
   database: environment.Sql_companyDB,
-  driver: "msnodesqlv8",
+
+  // SQL Server authentication
   user: environment.Sql_username,
   password: environment.Sql_password,
+
   options: {
-    encrypt: true, // important
-    trustServerCertificate: true // 🔥 THIS FIXES YOUR ERROR
+    encrypt: true,
+    trustServerCertificate: true
+  },
+
+  pool: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 30000
   }
+};
+
+const con = new sql.ConnectionPool(config);
+
+con.on("error", (err) => {
+  logger.error("SQL Connection Pool Error: " + err.message);
 });
 
-con.connect((err) => {
-  if (err) {
-    logger.error("Failed to connect to database: " + err.message);
-  } else {
-    logger.info("Database Connected | Schema: " + environment.companyDB);
+con.connect()
+  .then(() => {
+    logger.info(
+      "Database Connected | Server: " +
+      environment.Sql_server +
+      " | Database: " +
+      environment.Sql_companyDB
+    );
+  })
+  .catch((err) => {
 
-  }
-});
+    console.log(err.toString());
+    
+    logger.error(
+      "Failed to connect to database: " + err.message
+    );
 
+    console.error("SQL Connection Error:", err);
+  });
 
 module.exports.con = con;

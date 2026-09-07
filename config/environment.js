@@ -14,10 +14,10 @@ module.exports = {
   username: "SYSTEM",
   password: "Mjk@1234",
 
-  Sql_server: "1234",
-  Sql_companyDB: "Z10_TEST",
-  Sql_username: "PSL2",
-  Sql_password: "1234",
+  Sql_server: "SAPWINDOWS\\SQLEXPRESS",
+  Sql_companyDB: "SAPDB",
+  Sql_username: "sa",
+  Sql_password: "Sa@123",
 
   sapServiceLayer: "https://172.16.1.38:50000",
   IP: "10.0.0.6",
