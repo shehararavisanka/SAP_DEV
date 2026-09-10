@@ -4,14 +4,20 @@ const authRouter = require("./routes/auth.route");
 const requestLogger = require("./util/request.logger");
 const logger = require("./util/default.logger");
 const environment = require("./config/environment"); 
-const app = express();
-  
-const MainController = require("./controllers/Main.controller");
 
+const MainController = require("./routes/MainController.route");
+const ItemMaster = require("./routes/ItemMaster.Controller");
+
+
+const YAML = require('yamljs');
+const swaggerUi = require('swagger-ui-express');
+const https = require("https");
+const app = express();
  
 
+ 
 // running port
-const PORT = process.env.PORT || environment.RunningPort;
+const PORT = 4500;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -30,8 +36,27 @@ if (environment.requestLogEnable) {
 } else {
   logger.info("Request logger disabled.");
 }
+  
+
+
+const swaggerDocument = YAML.load('./master-data-api.yaml');
+
+app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument)
+);
+//https://localhost:4500/api-docs
  
  
+
+
+//apis
+app.use("/api/auth", authRouter);
+//customer
+app.use("/api/BPMaster", MainController);
+app.use("/api/ItemMaster", ItemMaster);
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = new Error("API Not Found");
@@ -46,9 +71,18 @@ app.use((err, req, res, next) => {
 
   res.status(status).json({ message: message });
 });
+ 
+// Example APIs
+app.get("/api/BPMaster/Select/ALL", (req, res) => {
+    res.json({
+        success: true,
+        data: []
+    });
+});
+
 
 app.listen(PORT, () => {
-  logger.info(`API listens on port: ${PORT}`);
+    
 
   var j = schedule.scheduleJob(
     // "*/" + environment.CycleTime + " * * * *",
@@ -57,7 +91,7 @@ app.listen(PORT, () => {
       logger.info(`Executing every ${environment.CycleTime} minutes!`);
       logger.info(`/************************/`);
 
-       MainController.UpdateChecking();
+      //  MainController.UpdateChecking();
    
     }
   );

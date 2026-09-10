@@ -3,32 +3,53 @@ const masterservice = require('../services/Masters/master.service')
 const masterservice_sql = require('../services/Masters/master_sql.service')
 
 
+
+const fs = require('fs');
+
+const config = JSON.parse(
+    fs.readFileSync('./config.Json', 'utf8')
+);
+
 exports.UpdateChecking = async (req, res, next) => {
 
     try {
 
         //call HANA SP and get updatedDocumentlist
         //Master tablelist
+ 
 
-        // var lastrundate = '2024-08-20 08:00'
-        // var updatedDocumentlist = await masterservice.select_All_MasterTables(lastrundate)
+        const date = new Date(config.lastupdatedate);
+        var lastrundate = date.toISOString().slice(0, 16).replace('T', ' ');
 
-        // console.log(updatedDocumentlist)
-        // if (updatedDocumentlist != null) {
+       
 
-        //     for (let index = 0; index < updatedDocumentlist.length; index++) {
-        //         const element = updatedDocumentlist[index];
-        //         //update sql loadcontrol table
+        var updatedDocumentlist = await masterservice.select_All_MasterTables(lastrundate)
 
-        //         var result = await masterservice_sql.update_LoadControl(element.LoadControlID)
-        //         console.log(result)
+        console.log(updatedDocumentlist)
+        if (updatedDocumentlist != null) {
 
-        //     }
+            for (let index = 0; index < updatedDocumentlist.length; index++) {
+                const element = updatedDocumentlist[index];
+                //update sql loadcontrol table
 
-        this.DataSync();
+                var result = await masterservice_sql.update_LoadControl(element.LoadControlID)
+                console.log(result)
 
-        // }
+            }
+
+            this.DataSync();
+
+        }
         // //Transaction tablelist
+
+
+        config.lastupdatedate = new Date().toISOString();
+
+        fs.writeFileSync(
+        './config.json',
+        JSON.stringify(config, null, 2),
+        'utf8'
+        );
 
 
 
@@ -61,15 +82,15 @@ exports.DataSync = async (req, res, next) => {
 
             var updatedDocumentlist = await masterservice.select_MasterTables_byname(element.SourceTable, result)
 
-             console.log(updatedDocumentlist)
+            console.log(updatedDocumentlist)
             if (updatedDocumentlist != null) {
 
                 for (let index = 0; index < updatedDocumentlist.length; index++) {
                     const element1 = updatedDocumentlist[index];
 
-                        console.log(element1);
+                    console.log(element1);
 
-                        console.log(element.SourceTable);
+                    console.log(element.SourceTable);
 
 
 
@@ -92,7 +113,7 @@ exports.DataSync = async (req, res, next) => {
 
                         console.log(values);
 
-                        execquery = execquery + values+";";
+                        execquery = execquery + values + ";";
                         var resultInsert = await masterservice_sql.update_custom_stgtable(execquery)
                         console.log(resultInsert);
 
@@ -101,7 +122,7 @@ exports.DataSync = async (req, res, next) => {
 
                 }
                 //updateloadcontrol
-             var recordupdate = await masterservice_sql.update_loadcontrol_AllNewRecords(element.LoadControlID);
+                var recordupdate = await masterservice_sql.update_loadcontrol_AllNewRecords(element.LoadControlID);
 
             }
 

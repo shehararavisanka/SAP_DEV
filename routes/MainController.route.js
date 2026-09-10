@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const isAuth = require('../middleware/is-auth');
-const bedmaster = require('../controllers/Main.controller.js');
+const BPMaster = require('../controllers/Masters/BPMaster.controller');
 
-router.post('/', isAuth, bedmaster.UpdateChecking); 
+router.get('/Select/ALL',  BPMaster.SelectData); 
+router.get('/SelectByDate',  BPMaster.SelectDataBydate); 
 
 module.exports = router;

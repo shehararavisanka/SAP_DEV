@@ -16,6 +16,73 @@ const connectionString =
 const master_sql = function () { };
 
 
+master_sql.select_bpmaster_AlL = async (result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, " SELECT  [CardCode] as ClientCode,[CardName] as ClientName,[CardType],[GroupCode] as ClientType,[Phone1] as ClientPhone1,[Phone2] as ClientPhone2,[E_Mail],[Fax],[AddID],[RegNum],[Notes],[CreditLine] as CreditLimit,[DebtLine],[GroupNum],[validFor],[validFrom],[validTo],[CreatedDateTime],[UpdatedDateTime] FROM  "+environment.Sql_companyDB+".[dbo].[BPMaster]", (err, rows) => {
+            if (err) {
+                console.error("========== ODBC ERROR ==========");
+                console.error(err);
+                console.error("================================");
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+master_sql.select_bpmaster_ByDate = async (fromdate, todate ,result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, " SELECT  [CardCode] as ClientCode,[CardName] as ClientName,[CardType],[GroupCode] as ClientType,[Phone1] as ClientPhone1,[Phone2] as ClientPhone2,[E_Mail],[Fax],[AddID],[RegNum],[Notes],[CreditLine] as CreditLimit,[DebtLine],[GroupNum],[validFor],[validFrom],[validTo],[CreatedDateTime],[UpdatedDateTime]  FROM  "+environment.Sql_companyDB+".[dbo].[BPMaster]  where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
+            if (err) {
+                console.error("========== ODBC ERROR ==========");
+                console.error(err);
+                console.error("================================");
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+master_sql.select_itmmaster_AlL = async (result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, " SELECT   [ItemCode],[ItemName],[FrgnName],[ItmsGrpCod],[PrchseItem],[SellItem],[InvntItem],[UgpCode],[SalUnitMsr],[U_VZ_SubGroup],[U_VZ_SubGroup2],[ManBtchNum],[ManSerNum],[validFor],[validFrom],[validTo],[CreatedDateTime],[UpdatedDateTime] FROM "+environment.Sql_companyDB+".[dbo].[ItemMaster]", (err, rows) => {
+            if (err) {
+                console.error("========== ODBC ERROR ==========");
+                console.error(err);
+                console.error("================================");
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+master_sql.select_itmmaster_ByDate = async (fromdate, todate ,result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, "SELECT   [ItemCode],[ItemName],[FrgnName],[ItmsGrpCod],[PrchseItem],[SellItem],[InvntItem],[UgpCode],[SalUnitMsr],[U_VZ_SubGroup],[U_VZ_SubGroup2],[ManBtchNum],[ManSerNum],[validFor],[validFrom],[validTo],[CreatedDateTime],[UpdatedDateTime] FROM "+environment.Sql_companyDB+".[dbo].[ItemMaster] where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
+            if (err) {
+                console.error("========== ODBC ERROR ==========");
+                console.error(err);
+                console.error("================================");
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
 master_sql.select_loadcontrol_Allactive = async (result) => {
 
     return new Promise(function (resolve, reject) {
