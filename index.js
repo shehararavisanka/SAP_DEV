@@ -5,8 +5,17 @@ const requestLogger = require("./util/request.logger");
 const logger = require("./util/default.logger");
 const environment = require("./config/environment"); 
 
-const MainController = require("./routes/MainController.route");
+const MainController = require("./controllers/Main.controller");
+
+
+const BPMaster = require("./routes/MainController.route");
 const ItemMaster = require("./routes/ItemMaster.Controller");
+const Warehousemaster = require("./routes/Warehousemaster.controller");
+const HouseBankAccounts = require("./routes/HouseBankAccounts.controller");
+const SalesEmployees = require("./routes/SalesEmployees.controller");
+const Users = require("./routes/Users.controller");
+
+
 
 
 const YAML = require('yamljs');
@@ -54,8 +63,14 @@ app.use(
 //apis
 app.use("/api/auth", authRouter);
 //customer
-app.use("/api/BPMaster", MainController);
+app.use("/api/BPMaster", BPMaster);
 app.use("/api/ItemMaster", ItemMaster);
+app.use("/api/Warehouse", Warehousemaster);
+app.use("/api/HouseBankAccounts", HouseBankAccounts);
+app.use("/api/SalesEmployees", SalesEmployees);
+app.use("/api/Users", Users);
+
+ 
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -86,12 +101,12 @@ app.listen(PORT, () => {
 
   var j = schedule.scheduleJob(
     // "*/" + environment.CycleTime + " * * * *",
-      "*/2 * * * *",
+      "* * * * *",
     () => {
       logger.info(`Executing every ${environment.CycleTime} minutes!`);
       logger.info(`/************************/`);
 
-      //  MainController.UpdateChecking();
+        MainController.UpdateChecking();
    
     }
   );

@@ -1,5 +1,5 @@
   
- Create PROCEDURE  "Sap_selelct_ItemMaster_All"
+ Create PROCEDURE  "Sap_select_ItemMaster_All"
 (
     IN I_LastUpdateDate TIMESTAMP
 )

@@ -2,7 +2,7 @@ const master_sql = require('../../services/Masters/master_sql.service');
 
 exports.SelectData = async (req, res, next) => {
     try {
-        var bpdetails = await master_sql.select_itmmaster_AlL();
+        var bpdetails = await master_sql.select_users_AlL();
         res.status(200).json(
             {
                 Status:"Success",
@@ -28,7 +28,7 @@ exports.SelectDataBydate = async (req, res, next) => {
         var fdate= formatDate(FromDate);
         var tdate= formatDate(ToDate);
 
-        var bpdetails = await master_sql.select_itmmaster_ByDate(fdate,tdate);
+        var bpdetails = await master_sql.select_users_ByDate(fdate,tdate);
 
         res.status(200).json(
             {

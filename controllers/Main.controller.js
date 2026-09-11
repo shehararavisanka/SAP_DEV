@@ -24,8 +24,7 @@ exports.UpdateChecking = async (req, res, next) => {
        
 
         var updatedDocumentlist = await masterservice.select_All_MasterTables(lastrundate)
-
-        console.log(updatedDocumentlist)
+ 
         if (updatedDocumentlist != null) {
 
             for (let index = 0; index < updatedDocumentlist.length; index++) {
@@ -43,13 +42,13 @@ exports.UpdateChecking = async (req, res, next) => {
         // //Transaction tablelist
 
 
-        config.lastupdatedate = new Date().toISOString();
+        // config.lastupdatedate = new Date().toISOString();
 
-        fs.writeFileSync(
-        './config.json',
-        JSON.stringify(config, null, 2),
-        'utf8'
-        );
+        // fs.writeFileSync(
+        // './config.json',
+        // JSON.stringify(config, null, 2),
+        // 'utf8'
+        // );
 
 
 
@@ -72,8 +71,7 @@ exports.DataSync = async (req, res, next) => {
 
         for (let index = 0; index < activatedlist.length; index++) {
             const element = activatedlist[index];
-
-            console.log(element)
+ 
             //call hana database and get dataset
 
             const date = new Date(element.LastLoadStartTime);
@@ -81,24 +79,20 @@ exports.DataSync = async (req, res, next) => {
 
 
             var updatedDocumentlist = await masterservice.select_MasterTables_byname(element.SourceTable, result)
-
-            console.log(updatedDocumentlist)
+ 
             if (updatedDocumentlist != null) {
 
                 for (let index = 0; index < updatedDocumentlist.length; index++) {
                     const element1 = updatedDocumentlist[index];
-
-                    console.log(element1);
-
-                    console.log(element.SourceTable);
+ 
 
 
 
-                    if (element.SourceTable == 'BPMaster') {
+                    // if (element.SourceTable == 'BPMaster') {
 
-                        var execquery = "EXEC [dbo].[sp_BPMaster_Insert] "
+                        var execquery = "EXEC [dbo].[sp_"+element.SourceTable+"_Insert] "
 
-                        console.log(element1);
+                      
                         const values = Object.values(element1).map(value => {
                             if (value === null || value === undefined) {
                                 return 'NULL';
@@ -111,15 +105,13 @@ exports.DataSync = async (req, res, next) => {
                             return `'${String(value).replace(/'/g, "''")}'`;
                         }).join(',');
 
-                        console.log(values);
+                      
 
                         execquery = execquery + values + ";";
                         var resultInsert = await masterservice_sql.update_custom_stgtable(execquery)
                         console.log(resultInsert);
 
-                    }
-
-
+                    // } 
                 }
                 //updateloadcontrol
                 var recordupdate = await masterservice_sql.update_loadcontrol_AllNewRecords(element.LoadControlID);

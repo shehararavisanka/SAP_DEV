@@ -83,6 +83,124 @@ master_sql.select_itmmaster_ByDate = async (fromdate, todate ,result) => {
 };
 
 
+
+master_sql.select_warehouse_AlL = async (result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, " SELECT [WhsCode],[WhsName] ,[Inactive],[U_VZ_Van]  FROM "+environment.Sql_companyDB+".[dbo].[Warehouse]", (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+master_sql.select_warehouse_ByDate = async (fromdate, todate ,result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, " SELECT [WhsCode],[WhsName] ,[Inactive],[U_VZ_Van]  FROM "+environment.Sql_companyDB+".[dbo].[Warehouse] where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
+            if (err) {
+                 
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+master_sql.select_HouseBankAccounts_AlL = async (result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, " SELECT   [BankCode],[BankName]   FROM "+environment.Sql_companyDB+".[dbo].[HouseBankAccounts]", (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+master_sql.select_HouseBankAccounts_ByDate = async (fromdate, todate ,result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, " SELECT  [BankCode],[BankName]    FROM "+environment.Sql_companyDB+".[dbo].[HouseBankAccounts] where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
+            if (err) {
+                 
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+master_sql.select_salesemp_AlL = async (result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, "SELECT [SlpCode] ,[SlpName] ,[Memo] ,[Active] ,[Telephone] ,[Mobil] ,[Fax] ,[Email]   FROM "+environment.Sql_companyDB+".[dbo].[SalesEmployees]", (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+master_sql.select_salesemp_ByDate = async (fromdate, todate ,result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, "SELECT [SlpCode] ,[SlpName] ,[Memo] ,[Active] ,[Telephone] ,[Mobil] ,[Fax] ,[Email]   FROM "+environment.Sql_companyDB+".[dbo].[SalesEmployees] where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
+            if (err) {
+                 
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+
+master_sql.select_users_AlL = async (result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, "SELECT  [USER_CODE] ,[U_NAME] ,[E_Mail] ,[Department] ,[PortNum] ,[Locked]    FROM "+environment.Sql_companyDB+".[dbo].[Users]", (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+master_sql.select_users_ByDate = async (fromdate, todate ,result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, "SELECT  [USER_CODE] ,[U_NAME] ,[E_Mail] ,[Department] ,[PortNum] ,[Locked]    FROM "+environment.Sql_companyDB+".[dbo].[Users] where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
+            if (err) {
+                 
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
 master_sql.select_loadcontrol_Allactive = async (result) => {
 
     return new Promise(function (resolve, reject) {
@@ -138,15 +256,12 @@ master_sql.update_loadcontrol_AllNewRecords = async (loadcontrolid, message, res
     return new Promise(function (resolve, reject) {
         sql.query(connectionString, "update  "+environment.Sql_companyDB+".[dbo].[LoadControl] set NewRecords=0,  LastLoadStartTime  = GETDATE() , LastLoadEndTime=GETDATE()  where LoadControlID="+loadcontrolid, (err, rows) => {
             if (err) {
-                console.error("========== ODBC ERROR ==========");
-                console.error(err);
-                console.error("================================");
+               
                 return;
             }
 
             resolve(rows)
-            // console.log("CONNECTED!");
-            // console.log(rows);
+            
         });
     });
 };

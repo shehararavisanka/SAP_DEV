@@ -1,4 +1,4 @@
- Create PROCEDURE  "Sap_selelct_Warehouse_All"
+ Create PROCEDURE  "Sap_select_Warehouse_All"
 (
     IN I_LastUpdateDate TIMESTAMP
 )

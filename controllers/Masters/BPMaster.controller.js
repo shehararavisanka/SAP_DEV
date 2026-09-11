@@ -5,7 +5,7 @@ exports.SelectData = async (req, res, next) => {
         var bpdetails = await master_sql.select_bpmaster_AlL();
         res.status(200).json(
             {
-                Status:"Sucess",
+                Status:"Success",
                 Response:bpdetails
             }
             
@@ -14,7 +14,7 @@ exports.SelectData = async (req, res, next) => {
         console.log(error);
         res.status(500).json(
             {
-                Status:"Unsucess",
+                Status:"Unsuccess",
                 Response:error
             }
         );
@@ -32,7 +32,7 @@ exports.SelectDataBydate = async (req, res, next) => {
 
         res.status(200).json(
             {
-                Status:"Sucess",
+                Status:"Success",
                 Response:bpdetails
             }
             
@@ -41,7 +41,7 @@ exports.SelectDataBydate = async (req, res, next) => {
         console.log(error);
         res.status(500).json(
             {
-                Status:"Unsucess",
+                Status:"Unsuccess",
                 Response:error
             }
         );
