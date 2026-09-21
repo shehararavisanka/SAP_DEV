@@ -30,7 +30,7 @@
     "mssql": "^7.3.0",
     "mysql": "^2.18.1",
     "node-schedule": "^2.0.0",
-    "node-windows": "^1.0.0-beta.7",
+    "node-windows": "^1.0.0-beta.8",
     "rotating-file-stream": "^2.1.5",
     "sap-hdbext-promisfied": "^2.202203.1",
     "simple-node-logger": "^21.8.12",

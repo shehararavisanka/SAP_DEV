@@ -17,7 +17,7 @@ info:
     available.
   version: 1.0.0
 servers:
-  - url: http://localhost:4500
+  - url: http://20.21.100.106:4500
     description: Local development server (HTTPS)
 tags:
   - name: BPMaster

@@ -2,9 +2,9 @@ var Service = require('node-windows').Service;
 
 // Create a new service object
 var svc = new Service({
-  name:'NinewellsapiInter',
+  name:'Sap_Intergration',
   description: 'The nodejs.org example web server.',
-  script: 'D:\\Projects\\NEW\\index.js'
+  script: 'D:\\shehara\\SAP_DEV\\index.js'
 });
 
 // Listen for the "install" event, which indicates the
