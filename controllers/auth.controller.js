@@ -20,6 +20,12 @@ exports.user_login = (req, res, next) => {
     throw error;
   }
 
+  if (userName!='SapUser' ||  password!='Usr@2026') {
+    const error = new Error('Incorrect username or password.');
+    error.statusCode = 401;
+    throw error;
+  }
+
   let jwtToken = jwt.sign(
     {
       id: userName,

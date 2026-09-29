@@ -3,7 +3,7 @@ const router = express.Router();
 const isAuth = require('../middleware/is-auth');
 const ItemMaster = require('../controllers/Masters/ItemMaster.controller');
 
-router.get('/Select/ALL',  ItemMaster.SelectData); 
-router.get('/SelectByDate',  ItemMaster.SelectDataBydate); 
+router.get('/Select/ALL', isAuth, ItemMaster.SelectData); 
+router.get('/SelectByDate', isAuth, ItemMaster.SelectDataBydate); 
 
 module.exports = router;

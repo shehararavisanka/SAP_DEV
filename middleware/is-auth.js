@@ -6,8 +6,12 @@ module.exports = (req, res, next) => {
   try {
     decodedToken = jwt.verify(token, 'longer-secret-is-better');
   } catch (err) {
-    err.statusCode = 500;
-    throw err;
+   // err.statusCode = 500;
+   // throw err;
+
+    const error = new Error('Couldn`t find the Authorization.');
+    error.statusCode = 401;
+    throw error;
   }
 
   if (!decodedToken) {

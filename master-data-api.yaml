@@ -1,767 +1,1359 @@
 openapi: 3.0.3
+
 info:
   title: Master Data API
   description: >
-    APIs for retrieving master data records for BPMaster, ItemMaster, Warehouse,
-    HouseBankAccounts, CostCenter, SalesEmployees, and Users.
-    Each table exposes two GET endpoints: a "Select All" endpoint that returns
-    every record, and a "SelectByDate" endpoint that filters records by a
-    FromDate/ToDate range.
+    APIs for authentication and retrieving master data records for BPMaster,
+    ItemMaster, Warehouse, HouseBankAccounts, CostCenter, SalesEmployees,
+    and Users.
 
-    NOTE: The actual database/entity schema was not provided for this request.
-    The date column used internally for SelectByDate filtering (e.g. CreatedDate,
-    UpdatedDate, etc.) for each table is therefore marked as "requiring
-    confirmation" in the relevant endpoint description, and the response schemas
-    below use a generic placeholder record shape. Replace the placeholder schema
-    properties with the real entity fields once the table definitions are
-    available.
+    Authentication is performed using POST /api/auth. The returned JWT token
+    must be supplied as a Bearer token for all master-data endpoints.
+
+    Each master-data table exposes two GET endpoints:
+    - Select All: returns every record.
+    - SelectByDate: filters records by a FromDate/ToDate range.
+
+    NOTE:
+    The actual database/entity schema was not provided. The date column used
+    internally for SelectByDate filtering (e.g. CreatedDate, UpdatedDate, etc.)
+    for each table therefore requires confirmation. The response schemas below
+    use a generic placeholder record shape until the actual entity definitions
+    are available.
+
   version: 1.0.0
+
 servers:
-  - url: http://20.21.100.106:4500
-    description: Local development server (HTTPS)
+  - url: http://10.0.0.4:4500
+    description: Master Data API server
+
 tags:
+  - name: Authentication
+    description: Authentication and authorization operations.
+
   - name: BPMaster
     description: Master data operations for the BPMaster table.
+
   - name: ItemMaster
     description: Master data operations for the ItemMaster table.
+
   - name: Warehouse
     description: Master data operations for the Warehouse table.
+
   - name: HouseBankAccounts
     description: Master data operations for the HouseBankAccounts table.
+
   - name: CostCenter
     description: Master data operations for the CostCenter table.
+
   - name: SalesEmployees
     description: Master data operations for the SalesEmployees table.
+
   - name: Users
     description: Master data operations for the Users table.
 
+# All endpoints require Bearer authentication by default.
+# POST /api/auth overrides this with security: []
+security:
+  - bearerAuth: []
+
 paths:
-  /api/BPMaster/Select/ALL:
-    get:
+
+  # ============================================================
+  # AUTHENTICATION
+  # ============================================================
+
+  /api/auth:
+    post:
+      security: []
       tags:
-        - BPMaster
-      summary: Select all BPMaster records
+        - Authentication
+
+      summary: Authenticate user
+
       description: >
-        Returns all available records from the BPMaster table. No filtering is
-        applied.
-      operationId: getBPMasterSelectAll
+        Authenticates a user using username and password and returns a JWT
+        authentication token. The returned token must be supplied as a
+        Bearer token when calling protected master-data endpoints.
+
+      operationId: authenticateUser
+
+      servers:
+        - url: http://10.0.0.4:4500
+          description: Authentication server
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+
+            example:
+              username: "SapUser"
+              password: "Usr@2026"
+
       responses:
+
         '200':
-          description: OK. Returns all BPMaster records.
+          description: Authentication successful.
+
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BPMasterSelectAllResponse'
+                $ref: '#/components/schemas/LoginResponse'
+
+              example:
+                success: true
+                data:
+                  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                message: "Authentication successful."
+
         '400':
           description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Invalid username or password.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # BPMaster
+  # ============================================================
+
+  /api/BPMaster/Select/ALL:
+    get:
+      tags:
+        - BPMaster
+
+      summary: Select all BPMaster records
+
+      description: >
+        Returns all available records from the BPMaster table.
+        No filtering is applied.
+
+      operationId: getBPMasterSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all BPMaster records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BPMasterSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 
   /api/BPMaster/SelectByDate:
     get:
       tags:
         - BPMaster
+
       summary: Select BPMaster records by date range
+
       description: >
         Returns BPMaster records whose applicable date field falls within the
-        inclusive range [FromDate, ToDate]. The exact date column used for
-        filtering (e.g. CreatedDate or UpdatedDate) is NOT confirmed for this
-        table, since the BPMaster entity/table schema was not provided —
-        requires confirmation against the actual database schema before
-        implementation.
+        inclusive range [FromDate, ToDate].
+
+        The exact date column used for filtering, such as CreatedDate or
+        UpdatedDate, requires confirmation against the actual database schema.
+
       operationId: getBPMasterSelectByDate
+
       parameters:
         - $ref: '#/components/parameters/FromDate'
         - $ref: '#/components/parameters/ToDate'
+
       responses:
+
         '200':
           description: OK. Returns BPMaster records within the specified date range.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BPMasterSelectByDateResponse'
+
         '400':
           description: >
             Bad Request. Returned when FromDate or ToDate is missing, the date
             format is invalid, or FromDate is greater than ToDate.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # ItemMaster
+  # ============================================================
 
   /api/ItemMaster/Select/ALL:
     get:
       tags:
         - ItemMaster
+
       summary: Select all ItemMaster records
+
       description: >
-        Returns all available records from the ItemMaster table. No filtering is
-        applied.
+        Returns all available records from the ItemMaster table.
+        No filtering is applied.
+
       operationId: getItemMasterSelectAll
+
       responses:
+
         '200':
           description: OK. Returns all ItemMaster records.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ItemMasterSelectAllResponse'
+
         '400':
           description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
 
   /api/ItemMaster/SelectByDate:
     get:
       tags:
         - ItemMaster
+
       summary: Select ItemMaster records by date range
+
       description: >
         Returns ItemMaster records whose applicable date field falls within the
-        inclusive range [FromDate, ToDate]. The exact date column used for
-        filtering (e.g. CreatedDate or UpdatedDate) is NOT confirmed for this
-        table, since the ItemMaster entity/table schema was not provided —
-        requires confirmation against the actual database schema before
-        implementation.
+        inclusive range [FromDate, ToDate].
+
+        The exact date column used for filtering requires confirmation against
+        the actual database schema.
+
       operationId: getItemMasterSelectByDate
+
       parameters:
         - $ref: '#/components/parameters/FromDate'
         - $ref: '#/components/parameters/ToDate'
+
       responses:
+
         '200':
           description: OK. Returns ItemMaster records within the specified date range.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ItemMasterSelectByDateResponse'
+
         '400':
-          description: >
-            Bad Request. Returned when FromDate or ToDate is missing, the date
-            format is invalid, or FromDate is greater than ToDate.
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # Warehouse
+  # ============================================================
 
   /api/Warehouse/Select/ALL:
     get:
       tags:
         - Warehouse
+
       summary: Select all Warehouse records
+
       description: >
-        Returns all available records from the Warehouse table. No filtering is
-        applied.
+        Returns all available records from the Warehouse table.
+        No filtering is applied.
+
       operationId: getWarehouseSelectAll
+
       responses:
+
         '200':
           description: OK. Returns all Warehouse records.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WarehouseSelectAllResponse'
+
         '400':
           description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
 
   /api/Warehouse/SelectByDate:
     get:
       tags:
         - Warehouse
+
       summary: Select Warehouse records by date range
+
       description: >
         Returns Warehouse records whose applicable date field falls within the
-        inclusive range [FromDate, ToDate]. The exact date column used for
-        filtering (e.g. CreatedDate or UpdatedDate) is NOT confirmed for this
-        table, since the Warehouse entity/table schema was not provided —
-        requires confirmation against the actual database schema before
-        implementation.
+        inclusive range [FromDate, ToDate].
+
+        The exact date column used for filtering requires confirmation against
+        the actual database schema.
+
       operationId: getWarehouseSelectByDate
+
       parameters:
         - $ref: '#/components/parameters/FromDate'
         - $ref: '#/components/parameters/ToDate'
+
       responses:
+
         '200':
           description: OK. Returns Warehouse records within the specified date range.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WarehouseSelectByDateResponse'
+
         '400':
-          description: >
-            Bad Request. Returned when FromDate or ToDate is missing, the date
-            format is invalid, or FromDate is greater than ToDate.
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # HouseBankAccounts
+  # ============================================================
 
   /api/HouseBankAccounts/Select/ALL:
     get:
       tags:
         - HouseBankAccounts
+
       summary: Select all HouseBankAccounts records
+
       description: >
-        Returns all available records from the HouseBankAccounts table. No filtering is
-        applied.
+        Returns all available records from the HouseBankAccounts table.
+        No filtering is applied.
+
       operationId: getHouseBankAccountsSelectAll
+
       responses:
+
         '200':
           description: OK. Returns all HouseBankAccounts records.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HouseBankAccountsSelectAllResponse'
+
         '400':
           description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
 
   /api/HouseBankAccounts/SelectByDate:
     get:
       tags:
         - HouseBankAccounts
+
       summary: Select HouseBankAccounts records by date range
+
       description: >
-        Returns HouseBankAccounts records whose applicable date field falls within the
-        inclusive range [FromDate, ToDate]. The exact date column used for
-        filtering (e.g. CreatedDate or UpdatedDate) is NOT confirmed for this
-        table, since the HouseBankAccounts entity/table schema was not provided —
-        requires confirmation against the actual database schema before
-        implementation.
+        Returns HouseBankAccounts records whose applicable date field falls
+        within the inclusive range [FromDate, ToDate].
+
+        The exact date column used for filtering requires confirmation against
+        the actual database schema.
+
       operationId: getHouseBankAccountsSelectByDate
+
       parameters:
         - $ref: '#/components/parameters/FromDate'
         - $ref: '#/components/parameters/ToDate'
+
       responses:
+
         '200':
           description: OK. Returns HouseBankAccounts records within the specified date range.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HouseBankAccountsSelectByDateResponse'
+
         '400':
-          description: >
-            Bad Request. Returned when FromDate or ToDate is missing, the date
-            format is invalid, or FromDate is greater than ToDate.
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # CostCenter
+  # ============================================================
 
   /api/CostCenter/Select/ALL:
     get:
       tags:
         - CostCenter
+
       summary: Select all CostCenter records
+
       description: >
-        Returns all available records from the CostCenter table. No filtering is
-        applied.
+        Returns all available records from the CostCenter table.
+        No filtering is applied.
+
       operationId: getCostCenterSelectAll
+
       responses:
+
         '200':
           description: OK. Returns all CostCenter records.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CostCenterSelectAllResponse'
+
         '400':
           description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
 
   /api/CostCenter/SelectByDate:
     get:
       tags:
         - CostCenter
+
       summary: Select CostCenter records by date range
+
       description: >
         Returns CostCenter records whose applicable date field falls within the
-        inclusive range [FromDate, ToDate]. The exact date column used for
-        filtering (e.g. CreatedDate or UpdatedDate) is NOT confirmed for this
-        table, since the CostCenter entity/table schema was not provided —
-        requires confirmation against the actual database schema before
-        implementation.
+        inclusive range [FromDate, ToDate].
+
+        The exact date column used for filtering requires confirmation against
+        the actual database schema.
+
       operationId: getCostCenterSelectByDate
+
       parameters:
         - $ref: '#/components/parameters/FromDate'
         - $ref: '#/components/parameters/ToDate'
+
       responses:
+
         '200':
           description: OK. Returns CostCenter records within the specified date range.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CostCenterSelectByDateResponse'
+
         '400':
-          description: >
-            Bad Request. Returned when FromDate or ToDate is missing, the date
-            format is invalid, or FromDate is greater than ToDate.
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # SalesEmployees
+  # ============================================================
 
   /api/SalesEmployees/Select/ALL:
     get:
       tags:
         - SalesEmployees
+
       summary: Select all SalesEmployees records
+
       description: >
-        Returns all available records from the SalesEmployees table. No filtering is
-        applied.
+        Returns all available records from the SalesEmployees table.
+        No filtering is applied.
+
       operationId: getSalesEmployeesSelectAll
+
       responses:
+
         '200':
           description: OK. Returns all SalesEmployees records.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SalesEmployeesSelectAllResponse'
+
         '400':
           description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
 
   /api/SalesEmployees/SelectByDate:
     get:
       tags:
         - SalesEmployees
+
       summary: Select SalesEmployees records by date range
+
       description: >
-        Returns SalesEmployees records whose applicable date field falls within the
-        inclusive range [FromDate, ToDate]. The exact date column used for
-        filtering (e.g. CreatedDate or UpdatedDate) is NOT confirmed for this
-        table, since the SalesEmployees entity/table schema was not provided —
-        requires confirmation against the actual database schema before
-        implementation.
+        Returns SalesEmployees records whose applicable date field falls within
+        the inclusive range [FromDate, ToDate].
+
+        The exact date column used for filtering requires confirmation against
+        the actual database schema.
+
       operationId: getSalesEmployeesSelectByDate
+
       parameters:
         - $ref: '#/components/parameters/FromDate'
         - $ref: '#/components/parameters/ToDate'
+
       responses:
+
         '200':
           description: OK. Returns SalesEmployees records within the specified date range.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SalesEmployeesSelectByDateResponse'
+
         '400':
-          description: >
-            Bad Request. Returned when FromDate or ToDate is missing, the date
-            format is invalid, or FromDate is greater than ToDate.
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # Users
+  # ============================================================
 
   /api/Users/Select/ALL:
     get:
       tags:
         - Users
+
       summary: Select all Users records
+
       description: >
-        Returns all available records from the Users table. No filtering is
-        applied.
+        Returns all available records from the Users table.
+        No filtering is applied.
+
       operationId: getUsersSelectAll
+
       responses:
+
         '200':
           description: OK. Returns all Users records.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UsersSelectAllResponse'
+
         '400':
           description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
 
   /api/Users/SelectByDate:
     get:
       tags:
         - Users
+
       summary: Select Users records by date range
+
       description: >
         Returns Users records whose applicable date field falls within the
-        inclusive range [FromDate, ToDate]. The exact date column used for
-        filtering (e.g. CreatedDate or UpdatedDate) is NOT confirmed for this
-        table, since the Users entity/table schema was not provided —
-        requires confirmation against the actual database schema before
-        implementation.
+        inclusive range [FromDate, ToDate].
+
+        The exact date column used for filtering requires confirmation against
+        the actual database schema.
+
       operationId: getUsersSelectByDate
+
       parameters:
         - $ref: '#/components/parameters/FromDate'
         - $ref: '#/components/parameters/ToDate'
+
       responses:
+
         '200':
           description: OK. Returns Users records within the specified date range.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UsersSelectByDateResponse'
+
         '400':
-          description: >
-            Bad Request. Returned when FromDate or ToDate is missing, the date
-            format is invalid, or FromDate is greater than ToDate.
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '500':
-          description: Internal Server Error. Unexpected server or database error.
+          description: Internal Server Error.
+
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
 
+# ==============================================================
+# COMPONENTS
+# ==============================================================
+
 components:
+
+  # ============================================================
+  # SECURITY
+  # ============================================================
+
+  securitySchemes:
+
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        JWT Bearer authentication.
+
+        First authenticate using POST /api/auth, then enter the returned
+        JWT token in the Swagger Authorize dialog.
+
+        Swagger will send:
+        Authorization: Bearer {token}
+
+
+  # ============================================================
+  # PARAMETERS
+  # ============================================================
+
   parameters:
+
     FromDate:
       name: FromDate
       in: query
       required: true
+
       description: >
-        Start date of the filter range (inclusive). Format: yyyy-MM-dd.
+        Start date of the filter range (inclusive).
+        Format: yyyy-MM-dd.
+
       schema:
         type: string
         format: date
         example: "2026-01-01"
+
+
     ToDate:
       name: ToDate
       in: query
       required: true
+
       description: >
-        End date of the filter range (inclusive). Format: yyyy-MM-dd.
+        End date of the filter range (inclusive).
+        Format: yyyy-MM-dd.
+
       schema:
         type: string
         format: date
         example: "2026-01-31"
+
+
+  # ============================================================
+  # SCHEMAS
+  # ============================================================
+
   schemas:
+
+    # ----------------------------------------------------------
+    # Authentication
+    # ----------------------------------------------------------
+
+    LoginRequest:
+      type: object
+
+      required:
+        - username
+        - password
+
+      properties:
+
+        username:
+          type: string
+          description: Username used for authentication.
+          example: "SapUser"
+
+        password:
+          type: string
+          format: password
+          description: Password used for authentication.
+          example: "Usr@2026"
+
+
+    LoginResponse:
+      type: object
+
+      properties:
+
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: object
+
+          properties:
+
+            token:
+              type: string
+              description: JWT access token.
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+        message:
+          type: string
+          nullable: true
+          example: "Authentication successful."
+
+
+    # ----------------------------------------------------------
+    # Generic Error
+    # ----------------------------------------------------------
+
     ErrorResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: false
+
         data:
           type: array
           items: {}
           example: []
+
         message:
           type: string
           example: "FromDate is required."
+
+
+    # ----------------------------------------------------------
+    # Generic Placeholder Record
+    # ----------------------------------------------------------
+
     PlaceholderRecord:
       type: object
+
       description: >
-        Generic placeholder record shape. Actual fields are unknown because the
-        table/entity schema was not supplied — replace with the real entity
+        Generic placeholder record shape. Actual fields are unknown because
+        the table/entity schema was not supplied. Replace with the real entity
         definition when available.
+
       properties:
+
         id:
           type: integer
           example: 1
+
         name:
           type: string
           example: "Example"
+
       additionalProperties: true
+
+
+    # ----------------------------------------------------------
+    # BPMaster
+    # ----------------------------------------------------------
+
     BPMasterSelectAllResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
     BPMasterSelectByDateResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
+    # ----------------------------------------------------------
+    # ItemMaster
+    # ----------------------------------------------------------
+
     ItemMasterSelectAllResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
     ItemMasterSelectByDateResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
+    # ----------------------------------------------------------
+    # Warehouse
+    # ----------------------------------------------------------
+
     WarehouseSelectAllResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
     WarehouseSelectByDateResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
+    # ----------------------------------------------------------
+    # HouseBankAccounts
+    # ----------------------------------------------------------
+
     HouseBankAccountsSelectAllResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
     HouseBankAccountsSelectByDateResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
+    # ----------------------------------------------------------
+    # CostCenter
+    # ----------------------------------------------------------
+
     CostCenterSelectAllResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
     CostCenterSelectByDateResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
+    # ----------------------------------------------------------
+    # SalesEmployees
+    # ----------------------------------------------------------
+
     SalesEmployeesSelectAllResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
     SalesEmployeesSelectByDateResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
+    # ----------------------------------------------------------
+    # Users
+    # ----------------------------------------------------------
+
     UsersSelectAllResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true
           example: null
+
+
     UsersSelectByDateResponse:
       type: object
+
       properties:
+
         success:
           type: boolean
           example: true
+
         data:
           type: array
           items:
             $ref: '#/components/schemas/PlaceholderRecord'
+
         message:
           type: string
           nullable: true

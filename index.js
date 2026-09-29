@@ -14,6 +14,13 @@ const Warehousemaster = require("./routes/Warehousemaster.controller");
 const HouseBankAccounts = require("./routes/HouseBankAccounts.controller");
 const SalesEmployees = require("./routes/SalesEmployees.controller");
 const Users = require("./routes/Users.controller");
+const CompanyDetails = require("./routes/CompanyDetails.controller");
+const Currency = require("./routes/Currency.controller");
+const PriceList = require("./routes/PriceList.controller");
+const UoMGroup = require("./routes/UoMGroup.controller");
+
+
+
 
 
 
@@ -26,7 +33,7 @@ const app = express();
 
  
 // running port
-const PORT = 4501;
+const PORT = 4500;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -69,6 +76,14 @@ app.use("/api/Warehouse", Warehousemaster);
 app.use("/api/HouseBankAccounts", HouseBankAccounts);
 app.use("/api/SalesEmployees", SalesEmployees);
 app.use("/api/Users", Users);
+app.use("/api/CompanyDetails", CompanyDetails);
+app.use("/api/Currency", Currency);
+app.use("/api/PriceList", PriceList);
+app.use("/api/UoMGroup", UoMGroup);
+
+
+
+
 
  
 
@@ -101,7 +116,7 @@ app.listen(PORT, () => {
 
   var j = schedule.scheduleJob(
     // "*/" + environment.CycleTime + " * * * *",
-      "* * * * *",
+      "*/5 * * * *",
     () => {
       logger.info(`Executing every ${environment.CycleTime} minutes!`);
       logger.info(`/************************/`);
