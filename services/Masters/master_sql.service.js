@@ -1,7 +1,7 @@
 const environment = require("../../config/environment");
-const config = require("../../SAP_Connection/db_connection");
+// const config = require("../../SAP_Connection/db_connection");
 
-const conn = config.con;
+// const conn = config.con;
 const sql = require("msnodesqlv8");
 
 const connectionString =
@@ -417,6 +417,58 @@ master_sql.insert_custom_stgtable = async (loadcontrolid, message, result) => {
     });
 };
 
+/************************************************************************************************** */
 
 
+
+
+master_sql.select_sq_AlL = async (typ, startdate,enddate,result) => {
+
+    return new Promise(function (resolve, reject) {
+        var query="exec  "+environment.Sql_companyDB+".[dbo].[sp_SalesQuotation_Select] "+typ+",'"+startdate+"','"+enddate+"'";
+        console.log(query)
+         sql.query(connectionString, query , (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+master_sql.select_so_AlL = async (typ, startdate,enddate,result) => {
+
+    return new Promise(function (resolve, reject) {
+        var query="exec  "+environment.Sql_companyDB+".[dbo].[sp_SalesOrder_Select] "+typ+",'"+startdate+"','"+enddate+"'";
+        console.log(query)
+         sql.query(connectionString, query , (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+master_sql.select_delivery_AlL = async (typ, startdate,enddate,result) => {
+
+    return new Promise(function (resolve, reject) {
+        var query="exec  "+environment.Sql_companyDB+".[dbo].[sp_Delivery_Select] "+typ+",'"+startdate+"','"+enddate+"'";
+        console.log(query)
+         sql.query(connectionString, query , (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
 module.exports = master_sql;

@@ -19,6 +19,10 @@ const Currency = require("./routes/Currency.controller");
 const PriceList = require("./routes/PriceList.controller");
 const UoMGroup = require("./routes/UoMGroup.controller");
 
+const SalesQuotation = require("./routes/SQ.controller");
+const SalesOrder = require("./routes/SO.controller");
+const Delivery = require("./routes/Delivery.controller");
+const Inventory = require("./routes/Inventory.controller");
 
 
 
@@ -81,6 +85,10 @@ app.use("/api/Currency", Currency);
 app.use("/api/PriceList", PriceList);
 app.use("/api/UoMGroup", UoMGroup);
 
+app.use("/api/SalesQuotation", SalesQuotation);
+app.use("/api/SalesOrder", SalesOrder);
+app.use("/api/Delivery", Delivery);
+app.use("/api/Inventory", Inventory);
 
 
 
