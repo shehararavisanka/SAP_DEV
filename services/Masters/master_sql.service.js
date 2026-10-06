@@ -455,6 +455,38 @@ master_sql.select_so_AlL = async (typ, startdate,enddate,result) => {
     });
 };
 
+master_sql.select_return_AlL = async (typ, startdate,enddate,result) => {
+
+    return new Promise(function (resolve, reject) {
+        var query="exec  "+environment.Sql_companyDB+".[dbo].[sp_Return_Select] "+typ+",'"+startdate+"','"+enddate+"'";
+        console.log(query)
+         sql.query(connectionString, query , (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+master_sql.select_invoice_AlL = async (typ, startdate,enddate,result) => {
+
+    return new Promise(function (resolve, reject) {
+        var query="exec  "+environment.Sql_companyDB+".[dbo].[sp_ARInvoice_Select] "+typ+",'"+startdate+"','"+enddate+"'";
+        console.log(query)
+         sql.query(connectionString, query , (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
 
 master_sql.select_delivery_AlL = async (typ, startdate,enddate,result) => {
 

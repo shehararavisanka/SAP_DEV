@@ -24,8 +24,13 @@ const SalesOrder = require("./routes/SO.controller");
 const Delivery = require("./routes/Delivery.controller");
 const Inventory = require("./routes/Inventory.controller");
 
+const Return = require("./routes/return.controller");
+const ARInvoice = require("./routes/arinvoice.controller");
+const ARCreditMemo = require("./routes/arcreditmemo.controller");
+const IncomingPayment = require("./routes/incomingpayment.controller");
+const InventoryTransfer = require("./routes/inventorytrasfer.controller");
 
-
+ 
 
 
 
@@ -37,7 +42,7 @@ const app = express();
 
  
 // running port
-const PORT = 4500;
+const PORT = 4501;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -89,6 +94,12 @@ app.use("/api/SalesQuotation", SalesQuotation);
 app.use("/api/SalesOrder", SalesOrder);
 app.use("/api/Delivery", Delivery);
 app.use("/api/Inventory", Inventory);
+app.use("/api/Return", Return);
+app.use("/api/ARInvoice", ARInvoice);
+
+app.use("/api/ARCreditMemo", ARCreditMemo);
+app.use("/api/IncomingPayment", IncomingPayment);
+app.use("/api/InventoryTransfer", InventoryTransfer);
 
 
 
