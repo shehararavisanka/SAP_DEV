@@ -56,6 +56,21 @@ tags:
   - name: Inventory
     description: Inventory document operations.
 
+  - name: Return
+    description: Return document operations.
+
+  - name: ARInvoice
+    description: A/R Invoice document operations.
+
+  - name: ARCreditMemo
+    description: A/R Credit Memo document operations.
+
+  - name: IncomingPayment
+    description: Incoming Payment document operations.
+
+  - name: InventoryTransfer
+    description: Inventory Transfer document operations.
+
 
 security:
   - bearerAuth: []
@@ -902,7 +917,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '401':
-          description: Unauthorized.
+          description: Unauthorized. A valid Bearer token is required.
 
           content:
             application/json:
@@ -1005,7 +1020,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '401':
-          description: Unauthorized.
+          description: Unauthorized. A valid Bearer token is required.
 
           content:
             application/json:
@@ -1108,7 +1123,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '401':
-          description: Unauthorized.
+          description: Unauthorized. A valid Bearer token is required.
 
           content:
             application/json:
@@ -1211,7 +1226,522 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
         '401':
-          description: Unauthorized.
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # Return
+  # ============================================================
+
+  /api/Return/Select/ALL:
+    get:
+      tags:
+        - Return
+
+      summary: Select all Return records
+
+      description: >
+        Returns all available Return records.
+
+      operationId: getReturnSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all Return records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /api/Return/SelectByDate:
+    get:
+      tags:
+        - Return
+
+      summary: Select Return records by date range
+
+      description: >
+        Returns Return records within the specified FromDate and ToDate
+        range.
+
+      operationId: getReturnSelectByDate
+
+      parameters:
+        - $ref: '#/components/parameters/FromDate'
+        - $ref: '#/components/parameters/ToDate'
+
+      responses:
+
+        '200':
+          description: OK. Returns Return records within the date range.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnSelectByDateResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # ARInvoice
+  # ============================================================
+
+  /api/ARInvoice/Select/ALL:
+    get:
+      tags:
+        - ARInvoice
+
+      summary: Select all ARInvoice records
+
+      description: >
+        Returns all available ARInvoice records.
+
+      operationId: getARInvoiceSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all ARInvoice records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ARInvoiceSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /api/ARInvoice/SelectByDate:
+    get:
+      tags:
+        - ARInvoice
+
+      summary: Select ARInvoice records by date range
+
+      description: >
+        Returns ARInvoice records within the specified FromDate and ToDate
+        range.
+
+      operationId: getARInvoiceSelectByDate
+
+      parameters:
+        - $ref: '#/components/parameters/FromDate'
+        - $ref: '#/components/parameters/ToDate'
+
+      responses:
+
+        '200':
+          description: OK. Returns ARInvoice records within the date range.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ARInvoiceSelectByDateResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # ARCreditMemo
+  # ============================================================
+
+  /api/ARCreditMemo/Select/ALL:
+    get:
+      tags:
+        - ARCreditMemo
+
+      summary: Select all ARCreditMemo records
+
+      description: >
+        Returns all available ARCreditMemo records.
+
+      operationId: getARCreditMemoSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all ARCreditMemo records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ARCreditMemoSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /api/ARCreditMemo/SelectByDate:
+    get:
+      tags:
+        - ARCreditMemo
+
+      summary: Select ARCreditMemo records by date range
+
+      description: >
+        Returns ARCreditMemo records within the specified FromDate and ToDate
+        range.
+
+      operationId: getARCreditMemoSelectByDate
+
+      parameters:
+        - $ref: '#/components/parameters/FromDate'
+        - $ref: '#/components/parameters/ToDate'
+
+      responses:
+
+        '200':
+          description: OK. Returns ARCreditMemo records within the date range.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ARCreditMemoSelectByDateResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # IncomingPayment
+  # ============================================================
+
+  /api/IncomingPayment/Select/ALL:
+    get:
+      tags:
+        - IncomingPayment
+
+      summary: Select all IncomingPayment records
+
+      description: >
+        Returns all available IncomingPayment records.
+
+      operationId: getIncomingPaymentSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all IncomingPayment records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomingPaymentSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /api/IncomingPayment/SelectByDate:
+    get:
+      tags:
+        - IncomingPayment
+
+      summary: Select IncomingPayment records by date range
+
+      description: >
+        Returns IncomingPayment records within the specified FromDate and ToDate
+        range.
+
+      operationId: getIncomingPaymentSelectByDate
+
+      parameters:
+        - $ref: '#/components/parameters/FromDate'
+        - $ref: '#/components/parameters/ToDate'
+
+      responses:
+
+        '200':
+          description: OK. Returns IncomingPayment records within the date range.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomingPaymentSelectByDateResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # InventoryTransfer
+  # ============================================================
+
+  /api/InventoryTransfer/Select/ALL:
+    get:
+      tags:
+        - InventoryTransfer
+
+      summary: Select all InventoryTransfer records
+
+      description: >
+        Returns all available InventoryTransfer records.
+
+      operationId: getInventoryTransferSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all InventoryTransfer records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryTransferSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /api/InventoryTransfer/SelectByDate:
+    get:
+      tags:
+        - InventoryTransfer
+
+      summary: Select InventoryTransfer records by date range
+
+      description: >
+        Returns InventoryTransfer records within the specified FromDate and ToDate
+        range.
+
+      operationId: getInventoryTransferSelectByDate
+
+      parameters:
+        - $ref: '#/components/parameters/FromDate'
+        - $ref: '#/components/parameters/ToDate'
+
+      responses:
+
+        '200':
+          description: OK. Returns InventoryTransfer records within the date range.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryTransferSelectByDateResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
 
           content:
             application/json:
@@ -1288,7 +1818,7 @@ components:
 
   # ============================================================
   # SCHEMAS
-  # ============================================================
+  # ==============================================================
 
   schemas:
 
@@ -1832,6 +2362,216 @@ components:
 
 
     InventorySelectByDateResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    # ----------------------------------------------------------
+    # Return
+    # ----------------------------------------------------------
+
+    ReturnSelectAllResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    ReturnSelectByDateResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    # ----------------------------------------------------------
+    # ARInvoice
+    # ----------------------------------------------------------
+
+    ARInvoiceSelectAllResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    ARInvoiceSelectByDateResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    # ----------------------------------------------------------
+    # ARCreditMemo
+    # ----------------------------------------------------------
+
+    ARCreditMemoSelectAllResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    ARCreditMemoSelectByDateResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    # ----------------------------------------------------------
+    # IncomingPayment
+    # ----------------------------------------------------------
+
+    IncomingPaymentSelectAllResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    IncomingPaymentSelectByDateResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    # ----------------------------------------------------------
+    # InventoryTransfer
+    # ----------------------------------------------------------
+
+    InventoryTransferSelectAllResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    InventoryTransferSelectByDateResponse:
       type: object
 
       properties:

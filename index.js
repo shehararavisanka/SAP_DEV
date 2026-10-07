@@ -42,7 +42,7 @@ const app = express();
 
  
 // running port
-const PORT = 4501;
+const PORT = 4500;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -94,6 +94,7 @@ app.use("/api/SalesQuotation", SalesQuotation);
 app.use("/api/SalesOrder", SalesOrder);
 app.use("/api/Delivery", Delivery);
 app.use("/api/Inventory", Inventory);
+
 app.use("/api/Return", Return);
 app.use("/api/ARInvoice", ARInvoice);
 
@@ -133,15 +134,15 @@ app.get("/api/BPMaster/Select/ALL", (req, res) => {
 app.listen(PORT, () => {
     
 
-  var j = schedule.scheduleJob(
-    // "*/" + environment.CycleTime + " * * * *",
-      "*/5 * * * *",
-    () => {
-      logger.info(`Executing every ${environment.CycleTime} minutes!`);
-      logger.info(`/************************/`);
+  // var j = schedule.scheduleJob(
+  //   // "*/" + environment.CycleTime + " * * * *",
+  //     "*/5 * * * *",
+  //   () => {
+  //     logger.info(`Executing every ${environment.CycleTime} minutes!`);
+  //     logger.info(`/************************/`);
 
-        MainController.UpdateChecking();
+  //       MainController.UpdateChecking();
    
-    }
-  );
+  //   }
+  // );
 });

@@ -488,6 +488,44 @@ master_sql.select_invoice_AlL = async (typ, startdate,enddate,result) => {
     });
 };
 
+
+master_sql.select_arcreditmemo_AlL = async (typ, startdate,enddate,result) => {
+
+    return new Promise(function (resolve, reject) {
+        var query="exec  "+environment.Sql_companyDB+".[dbo].[sp_ARCreditMemo_Select] "+typ+",'"+startdate+"','"+enddate+"'";
+        console.log(query)
+         sql.query(connectionString, query , (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+
+
+master_sql.select_incomingpayment_AlL = async (typ, startdate,enddate,result) => {
+
+    return new Promise(function (resolve, reject) {
+        var query="exec  "+environment.Sql_companyDB+".[dbo].[sp_IncomingPayment_Select] "+typ+",'"+startdate+"','"+enddate+"'";
+        console.log(query)
+         sql.query(connectionString, query , (err, rows) => {
+            if (err) {
+            
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
+
+
+
 master_sql.select_delivery_AlL = async (typ, startdate,enddate,result) => {
 
     return new Promise(function (resolve, reject) {
