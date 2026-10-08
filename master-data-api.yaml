@@ -35,14 +35,23 @@ tags:
   - name: HouseBankAccounts
     description: Master data operations for the HouseBankAccounts table.
 
-  - name: CostCenter
-    description: Master data operations for the CostCenter table.
+  - name: Currency
+    description: Master data operations for the Currency table.
 
   - name: SalesEmployees
     description: Master data operations for the SalesEmployees table.
 
   - name: Users
     description: Master data operations for the Users table.
+
+  - name: CompanyDetails
+    description: Master data operations for the CompanyDetails table.
+
+  - name: PriceList
+    description: Master data operations for the PriceList table.
+
+  - name: UoMGroup
+    description: Master data operations for the UoMGroup table.
 
   - name: SalesQuotation
     description: Sales quotation document operations.
@@ -543,17 +552,17 @@ paths:
 
 
   # ============================================================
-  # CostCenter
+  # Currency
   # ============================================================
 
-  /api/CostCenter/Select/ALL:
+  /api/Currency/Select/ALL:
     get:
       tags:
-        - CostCenter
+        - Currency
 
-      summary: Select all CostCenter records
+      summary: Select all Currency records
 
-      operationId: getCostCenterSelectAll
+      operationId: getCurrencySelectAll
 
       responses:
 
@@ -563,7 +572,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CostCenterSelectAllResponse'
+                $ref: '#/components/schemas/CurrencySelectAllResponse'
 
         '400':
           description: Bad Request.
@@ -590,14 +599,14 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
 
-  /api/CostCenter/SelectByDate:
+  /api/Currency/SelectByDate:
     get:
       tags:
-        - CostCenter
+        - Currency
 
-      summary: Select CostCenter records by date range
+      summary: Select Currency records by date range
 
-      operationId: getCostCenterSelectByDate
+      operationId: getCurrencySelectByDate
 
       parameters:
         - $ref: '#/components/parameters/FromDate'
@@ -611,7 +620,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CostCenterSelectByDateResponse'
+                $ref: '#/components/schemas/CurrencySelectByDateResponse'
 
         '400':
           description: Bad Request.
@@ -815,6 +824,315 @@ paths:
 
         '401':
           description: Unauthorized.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # CompanyDetails
+  # ============================================================
+
+  /api/CompanyDetails/Select/ALL:
+    get:
+      tags:
+        - CompanyDetails
+
+      summary: Select all CompanyDetails records
+
+      description: >
+        Returns all available CompanyDetails records.
+
+      operationId: getCompanyDetailsSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all CompanyDetails records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetailsSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /api/CompanyDetails/SelectByDate:
+    get:
+      tags:
+        - CompanyDetails
+
+      summary: Select CompanyDetails records by date range
+
+      description: >
+        Returns CompanyDetails records within the specified FromDate and ToDate
+        range.
+
+      operationId: getCompanyDetailsSelectByDate
+
+      parameters:
+        - $ref: '#/components/parameters/FromDate'
+        - $ref: '#/components/parameters/ToDate'
+
+      responses:
+
+        '200':
+          description: OK. Returns CompanyDetails records within the date range.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetailsSelectByDateResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # PriceList
+  # ============================================================
+
+  /api/PriceList/Select/ALL:
+    get:
+      tags:
+        - PriceList
+
+      summary: Select all PriceList records
+
+      description: >
+        Returns all available PriceList records.
+
+      operationId: getPriceListSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all PriceList records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceListSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /api/PriceList/SelectByDate:
+    get:
+      tags:
+        - PriceList
+
+      summary: Select PriceList records by date range
+
+      description: >
+        Returns PriceList records within the specified FromDate and ToDate
+        range.
+
+      operationId: getPriceListSelectByDate
+
+      parameters:
+        - $ref: '#/components/parameters/FromDate'
+        - $ref: '#/components/parameters/ToDate'
+
+      responses:
+
+        '200':
+          description: OK. Returns PriceList records within the date range.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceListSelectByDateResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  # ============================================================
+  # UoMGroup
+  # ============================================================
+
+  /api/UoMGroup/Select/ALL:
+    get:
+      tags:
+        - UoMGroup
+
+      summary: Select all UoMGroup records
+
+      description: >
+        Returns all available UoMGroup records.
+
+      operationId: getUoMGroupSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all UoMGroup records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UoMGroupSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /api/UoMGroup/SelectByDate:
+    get:
+      tags:
+        - UoMGroup
+
+      summary: Select UoMGroup records by date range
+
+      description: >
+        Returns UoMGroup records within the specified FromDate and ToDate
+        range.
+
+      operationId: getUoMGroupSelectByDate
+
+      parameters:
+        - $ref: '#/components/parameters/FromDate'
+        - $ref: '#/components/parameters/ToDate'
+
+      responses:
+
+        '200':
+          description: OK. Returns UoMGroup records within the date range.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UoMGroupSelectByDateResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
 
           content:
             application/json:
@@ -2087,10 +2405,10 @@ components:
 
 
     # ----------------------------------------------------------
-    # CostCenter
+    # Currency
     # ----------------------------------------------------------
 
-    CostCenterSelectAllResponse:
+    CurrencySelectAllResponse:
       type: object
 
       properties:
@@ -2109,7 +2427,7 @@ components:
           example: null
 
 
-    CostCenterSelectByDateResponse:
+    CurrencySelectByDateResponse:
       type: object
 
       properties:
@@ -2194,6 +2512,132 @@ components:
 
 
     UsersSelectByDateResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    # ----------------------------------------------------------
+    # CompanyDetails
+    # ----------------------------------------------------------
+
+    CompanyDetailsSelectAllResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    CompanyDetailsSelectByDateResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    # ----------------------------------------------------------
+    # PriceList
+    # ----------------------------------------------------------
+
+    PriceListSelectAllResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    PriceListSelectByDateResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    # ----------------------------------------------------------
+    # UoMGroup
+    # ----------------------------------------------------------
+
+    UoMGroupSelectAllResponse:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceholderRecord'
+
+        message:
+          type: string
+          nullable: true
+          example: null
+
+
+    UoMGroupSelectByDateResponse:
       type: object
 
       properties:

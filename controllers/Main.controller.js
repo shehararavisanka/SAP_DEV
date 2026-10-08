@@ -108,6 +108,8 @@ exports.DataSync = async (req, res, next) => {
                       
 
                         execquery = execquery + values + ";";
+
+                     //   console.log(execquery)
                         var resultInsert = await masterservice_sql.update_custom_stgtable(execquery)
                         console.log(resultInsert);
 

@@ -93,11 +93,10 @@ app.use("/api/UoMGroup", UoMGroup);
 app.use("/api/SalesQuotation", SalesQuotation);
 app.use("/api/SalesOrder", SalesOrder);
 app.use("/api/Delivery", Delivery);
-app.use("/api/Inventory", Inventory);
 
+app.use("/api/Inventory", Inventory);
 app.use("/api/Return", Return);
 app.use("/api/ARInvoice", ARInvoice);
-
 app.use("/api/ARCreditMemo", ARCreditMemo);
 app.use("/api/IncomingPayment", IncomingPayment);
 app.use("/api/InventoryTransfer", InventoryTransfer);
@@ -136,7 +135,7 @@ app.listen(PORT, () => {
 
   // var j = schedule.scheduleJob(
   //   // "*/" + environment.CycleTime + " * * * *",
-  //     "*/5 * * * *",
+  //     "* * * * *",
   //   () => {
   //     logger.info(`Executing every ${environment.CycleTime} minutes!`);
   //     logger.info(`/************************/`);
