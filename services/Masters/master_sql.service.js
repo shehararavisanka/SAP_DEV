@@ -17,10 +17,10 @@ const connectionString =
 const master_sql = function () { };
 
 
-master_sql.select_bpmaster_AlL = async (result) => {
+master_sql.select_bpmaster_AlL = async (typ,startdate,enddate ,result) => {
 
     return new Promise(function (resolve, reject) {
-         sql.query(connectionString, " SELECT  [CardCode] as ClientCode,[CardName] as ClientName,[CardType],[GroupCode] as ClientType,[Phone1] as ClientPhone1,[Phone2] as ClientPhone2,[E_Mail],[Fax],[AddID],[RegNum],[Notes],[CreditLine] as CreditLimit,[DebtLine],[GroupNum],[validFor],[validFrom],[validTo],[CreatedDateTime],[UpdatedDateTime] FROM  "+environment.Sql_companyDB+".[dbo].[BPMaster]", (err, rows) => {
+         sql.query(connectionString, "exec  "+environment.Sql_companyDB+".[dbo].[sp_BPMaster_Select] "+typ+",'"+startdate+"','"+enddate+"'", (err, rows) => {
             if (err) {
                 console.error("========== ODBC ERROR ==========");
                 console.error(err);
@@ -54,7 +54,7 @@ master_sql.select_bpmaster_ByDate = async (fromdate, todate ,result) => {
 master_sql.select_PriceList_AlL = async (result) => {
 
     return new Promise(function (resolve, reject) {
-         sql.query(connectionString, " SELECT [ListNum] as 'PriceListCode',[ListName] as 'PriceListDesc',[ValidFor] ,[PrimCurr],[CreatedDateTime] ,[UpdatedDateTime] FROM   "+environment.Sql_companyDB+".[dbo].[PriceList]", (err, rows) => {
+         sql.query(connectionString, " SELECT [ListNum],[ListName],[Currency],[ItemCode],[UomCode],[Price],[ValidFor] ,[PrimCurr],[CreatedDateTime] ,[UpdatedDateTime] FROM   "+environment.Sql_companyDB+".[dbo].[PriceList]", (err, rows) => {
             if (err) {
                 console.error("========== ODBC ERROR ==========");
                 console.error(err);
@@ -71,7 +71,7 @@ master_sql.select_PriceList_AlL = async (result) => {
 master_sql.select_PriceList_ByDate = async (fromdate, todate ,result) => {
 
     return new Promise(function (resolve, reject) {
-         sql.query(connectionString, "SELECT [ListNum] as 'PriceListCode',[ListName] as 'PriceListDesc',[ValidFor] ,[PrimCurr],[CreatedDateTime] ,[UpdatedDateTime] FROM   "+environment.Sql_companyDB+".[dbo].[PriceList] where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
+         sql.query(connectionString, "SELECT [ListNum],[ListName],[Currency],[ItemCode],[UomCode],[Price],[ValidFor] ,[PrimCurr],[CreatedDateTime] ,[UpdatedDateTime] FROM   "+environment.Sql_companyDB+".[dbo].[PriceList] where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
             if (err) {
                 console.error("========== ODBC ERROR ==========");
                 console.error(err);
@@ -189,7 +189,7 @@ master_sql.select_CompanyDetails_ByDate = async (fromdate, todate ,result) => {
 master_sql.select_itmmaster_AlL = async (result) => {
 
     return new Promise(function (resolve, reject) {
-         sql.query(connectionString, " SELECT   [ItemCode],[ItemName],[FrgnName],[ItmsGrpCod],[PrchseItem],[SellItem],[InvntItem],[UgpCode],[SalUnitMsr],[U_VZ_SubGroup],[U_VZ_SubGroup2],[ManBtchNum] as 'Isserializable',[ManSerNum],[validFor] as 'Active',[validFrom] as 'ActiveFrom',[validTo]  as 'ActiveTo',[CreatedDateTime],[UpdatedDateTime] FROM "+environment.Sql_companyDB+".[dbo].[ItemMaster]", (err, rows) => {
+         sql.query(connectionString, " SELECT   [ItemCode],[ItemName],[FrgnName],[ItmsGrpCod],[ItmsGrpName],[PrchseItem],[SellItem],[InvntItem],[UgpCode] as 'UomCode',[UomName] ,[SalUnitMsr], [ManBtchNum],[ManSerNum],[validFor] as 'Active',[validFrom] as 'ActiveFrom',[validTo]  as 'ActiveTo',[CreatedDateTime],[UpdatedDateTime] FROM "+environment.Sql_companyDB+".[dbo].[ItemMaster]", (err, rows) => {
             if (err) {
                 console.error("========== ODBC ERROR ==========");
                 console.error(err);
@@ -205,7 +205,7 @@ master_sql.select_itmmaster_AlL = async (result) => {
 master_sql.select_itmmaster_ByDate = async (fromdate, todate ,result) => {
 
     return new Promise(function (resolve, reject) {
-         sql.query(connectionString, "SELECT   [ItemCode],[ItemName],[FrgnName],[ItmsGrpCod],[PrchseItem],[SellItem],[InvntItem],[UgpCode],[SalUnitMsr],[U_VZ_SubGroup],[U_VZ_SubGroup2],[ManBtchNum] as 'Isserializable',[ManSerNum],[validFor] as 'Active',[validFrom] as 'ActiveFrom',[validTo]  as 'ActiveTo',[CreatedDateTime],[UpdatedDateTime] FROM "+environment.Sql_companyDB+".[dbo].[ItemMaster] where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
+         sql.query(connectionString, "SELECT   [ItemCode],[ItemName],[FrgnName],[ItmsGrpCod],[ItmsGrpName],[PrchseItem],[SellItem],[InvntItem],[UgpCode] as 'UomCode',[UomName] ,[SalUnitMsr], [ManBtchNum],[ManSerNum],[validFor] as 'Active',[validFrom] as 'ActiveFrom',[validTo]  as 'ActiveTo',[CreatedDateTime],[UpdatedDateTime] FROM "+environment.Sql_companyDB+".[dbo].[ItemMaster] where [UpdatedDateTime]>='"+fromdate+"' and '"+todate+"'>[UpdatedDateTime]", (err, rows) => {
             if (err) {
                 console.error("========== ODBC ERROR ==========");
                 console.error(err);

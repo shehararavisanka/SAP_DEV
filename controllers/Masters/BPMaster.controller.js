@@ -2,14 +2,23 @@ const master_sql = require('../../services/Masters/master_sql.service');
 
 exports.SelectData = async (req, res, next) => {
     try {
-        var bpdetails = await master_sql.select_bpmaster_AlL();
-        res.status(200).json(
-            {
-                Status:"Success",
-                Response:bpdetails
-            }
-            
-        );
+       
+
+
+         var bpdetails = await master_sql.select_bpmaster_AlL(
+                          1,
+                          '2026-01-01',
+                          '2026-01-01'
+                      );
+              
+                      const responseData = bpdetails[0]?.JsonResult
+                          ? JSON.parse(bpdetails[0].JsonResult)
+                          : [];
+              
+                      res.status(200).json({
+                          Status: "Success",
+                          Response: responseData
+                      });
     } catch (error) {
         console.log(error);
         res.status(500).json(
