@@ -18,6 +18,7 @@ const MasterService = {
     , select_All_MasterTables: async (lastdatetime) => {
         try {
             const  Query = `CALL ${environment.companyDB}."Sap_select_All_MasterTables"('${lastdatetime}')`;
+            console.log(Query)
             const QueryDataset = await conn.exec(Query);
 
             return QueryDataset;

@@ -21,7 +21,7 @@ exports.UpdateChecking = async (req, res, next) => {
         const date = new Date(config.lastupdatedate);
         var lastrundate = date.toISOString().slice(0, 16).replace('T', ' ');
 
-       
+       console.log(lastrundate)
 
         var updatedDocumentlist = await masterservice.select_All_MasterTables(lastrundate)
  

@@ -50,6 +50,9 @@ tags:
   - name: PriceList
     description: Master data operations for the PriceList table.
 
+  - name: ClientItemDiscount
+    description: Master data operations for the ClientItemDiscount table.
+
   - name: UoMGroup
     description: Master data operations for the UoMGroup table.
 
@@ -1043,6 +1046,109 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+  # ============================================================
+  # UoMGroup
+  # ============================================================
+
+  /api/ClientItemDiscount/Select/ALL:
+    get:
+      tags:
+        - ClientItemDiscount
+
+      summary: Select all ClientItemDiscount records
+
+      description: >
+        Returns all available ClientItemDiscount records.
+
+      operationId: getClientItemDiscountSelectAll
+
+      responses:
+
+        '200':
+          description: OK. Returns all ClientItemDiscount records.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientItemDiscountSelectAllResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /api/ClientItemDiscount/SelectByDate:
+    get:
+      tags:
+        - ClientItemDiscount
+
+      summary: Select ClientItemDiscount records by date range
+
+      description: >
+        Returns ClientItemDiscount records within the specified FromDate and ToDate
+        range.
+
+      operationId: getClientItemDiscountSelectByDate
+
+      parameters:
+        - $ref: '#/components/parameters/FromDate'
+        - $ref: '#/components/parameters/ToDate'
+
+      responses:
+
+        '200':
+          description: OK. Returns ClientItemDiscount records within the date range.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientItemDiscountSelectByDateResponse'
+
+        '400':
+          description: Bad Request.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '401':
+          description: Unauthorized. A valid Bearer token is required.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '500':
+          description: Internal Server Error.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 
 
   # ============================================================

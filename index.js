@@ -29,6 +29,7 @@ const ARInvoice = require("./routes/arinvoice.controller");
 const ARCreditMemo = require("./routes/arcreditmemo.controller");
 const IncomingPayment = require("./routes/incomingpayment.controller");
 const InventoryTransfer = require("./routes/inventorytrasfer.controller");
+const ClientItemDiscount = require("./routes/ClientItemDiscount.controller");
 
  
 
@@ -89,6 +90,7 @@ app.use("/api/CompanyDetails", CompanyDetails);
 app.use("/api/Currency", Currency);
 app.use("/api/PriceList", PriceList);
 app.use("/api/UoMGroup", UoMGroup);
+app.use("/api/ClientItemDiscount", ClientItemDiscount);
 
 app.use("/api/SalesQuotation", SalesQuotation);
 app.use("/api/SalesOrder", SalesOrder);
@@ -133,15 +135,15 @@ app.get("/api/BPMaster/Select/ALL", (req, res) => {
 app.listen(PORT, () => {
     
 
-  // var j = schedule.scheduleJob(
-  //   // "*/" + environment.CycleTime + " * * * *",
-  //     "* * * * *",
-  //   () => {
-  //     logger.info(`Executing every ${environment.CycleTime} minutes!`);
-  //     logger.info(`/************************/`);
+  var j = schedule.scheduleJob(
+    // "*/" + environment.CycleTime + " * * * *",
+      "*/5 * * * *",
+    () => {
+      logger.info(`Executing every ${environment.CycleTime} minutes!`);
+      logger.info(`/************************/`);
 
-  //       MainController.UpdateChecking();
+        MainController.UpdateChecking();
    
-  //   }
-  // );
+    }
+  );
 });

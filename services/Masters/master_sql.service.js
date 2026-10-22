@@ -54,7 +54,7 @@ master_sql.select_bpmaster_ByDate = async (fromdate, todate ,result) => {
 master_sql.select_PriceList_AlL = async (result) => {
 
     return new Promise(function (resolve, reject) {
-         sql.query(connectionString, " SELECT [ListNum],[ListName],[Currency],[ItemCode],[UomCode],[Price],[ValidFor] ,[PrimCurr],[CreatedDateTime] ,[UpdatedDateTime] FROM   "+environment.Sql_companyDB+".[dbo].[PriceList]", (err, rows) => {
+         sql.query(connectionString, " SELECT [ListNum],[ListName],[Currency],[ItemCode],[UomCode],[Price],[ValidFor] ,[PrimCurr],[CreatedDateTime] ,[UpdatedDateTime] FROM   "+environment.Sql_companyDB+".[dbo].[PriceList] where [Price]>0", (err, rows) => {
             if (err) {
                 console.error("========== ODBC ERROR ==========");
                 console.error(err);
@@ -168,6 +168,22 @@ master_sql.select_CompanyDetails_AlL = async (result) => {
     });
 };
 
+
+master_sql.select_ClientItemDiscount_AlL = async (result) => {
+
+    return new Promise(function (resolve, reject) {
+         sql.query(connectionString, "SELECT [ItemCode],[CardCode],[Price],[Currency],[Discount],[SalUnitMsr],[Valid],[CreatedDateTime],[UpdatedDateTime] FROM "+environment.Sql_companyDB+".[dbo].[ClientItemDiscount]", (err, rows) => {
+            if (err) {
+                console.error("========== ODBC ERROR ==========");
+                console.error(err);
+                console.error("================================");
+                return;
+            }
+
+            resolve(rows) 
+        });
+    });
+};
 
 master_sql.select_CompanyDetails_ByDate = async (fromdate, todate ,result) => {
 
